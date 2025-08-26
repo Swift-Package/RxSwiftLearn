@@ -5,20 +5,37 @@ import PackageDescription
 
 let package = Package(
     name: "RxSwiftLearn",
+    platforms: [.iOS(.v18), .macOS(.v15), .watchOS(.v11), .tvOS(.v18), .visionOS(.v2)],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "RxSwiftLearn",
-            targets: ["RxSwiftLearn"]),
+        .library(name: "RxSwiftLearn", targets: ["RxSwiftLearn"]),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/ReactiveX/RxSwift", branch: "main")
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "RxSwiftLearn"),
-        .testTarget(
-            name: "RxSwiftLearnTests",
-            dependencies: ["RxSwiftLearn"]
-        ),
-    ]
+        .target(name: "RxSwiftLearn", dependencies: ["RxSwift", .product(name: "RxCocoa", package: "RxSwift")]),
+        .testTarget(name: "RxSwiftLearnTests",
+                    dependencies: ["RxSwiftLearn", "RxSwift", .product(name: "RxCocoa", package: "RxSwift")]),
+    ],
+    swiftLanguageModes: [.v6, .v5]
 )
+// MARK: - 学习顺序
+// 1 RxSwiftLearnTests
+// 2 Subjects
+// 3 Relay
+// 4 Filter
+// 5 Transform
+// 6 PropertyListen
+// 7 CombiningOperators
+// 8 TimeOperators
+// 9 ErrorHandle
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
