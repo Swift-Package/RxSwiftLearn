@@ -1,11 +1,11 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 6.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "RxSwiftLearn",
-    platforms: [.iOS(.v18), .macOS(.v15), .watchOS(.v11), .tvOS(.v18), .visionOS(.v2)],
+    platforms: [.iOS(.v26), .macOS(.v26), .watchOS(.v26), .tvOS(.v26), .visionOS(.v26)],
     products: [
         .library(name: "RxSwiftLearn", targets: ["RxSwiftLearn"]),
     ],
@@ -14,11 +14,11 @@ let package = Package(
     ],
     targets: [
         .target(name: "RxSwiftLearn", dependencies: ["RxSwift", .product(name: "RxCocoa", package: "RxSwift")]),
-        .testTarget(name: "RxSwiftLearnTests",
-                    dependencies: ["RxSwiftLearn", "RxSwift", .product(name: "RxCocoa", package: "RxSwift")]),
+        .testTarget(name: "RxSwiftLearnTests", dependencies: ["RxSwiftLearn", "RxSwift", .product(name: "RxCocoa", package: "RxSwift")]),
     ],
-    swiftLanguageModes: [.v6, .v5]
+    swiftLanguageModes: [.v6]
 )
+
 // MARK: - 学习顺序
 // 1 RxSwiftLearnTests
 // 2 Subjects

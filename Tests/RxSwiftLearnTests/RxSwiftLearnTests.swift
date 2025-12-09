@@ -1,17 +1,26 @@
-import Testing
 import Foundation
+import UIKit
+import Testing
 import RxSwift
+import RxCocoa
 @testable import RxSwiftLearn
 
 @Suite("1 入门指南")
 struct RxSwiftLearn {
-    @Test("Observable") func example() async throws {
+    @Test("Observable") func example() {
+		var array = [10, 20, 30]
+		for number in array {
+			print(number)
+			array = [40, 50, 60]
+		}
+		print(array)
+		
+		
         let one = 1
         let two = 2
         let three = 3
         
         let observable = Observable.of(one, two, three)
-        
         _ = observable.subscribe { event in
             if let element = event.element {
                 print(element)
@@ -21,7 +30,6 @@ struct RxSwiftLearn {
 
     @Test("只会发出一个completed事件的空可观察序列") func empty() {
         let observable = Observable<Void>.empty()
-        
         _ = observable
             .subscribe(onNext: { element in
                 print(element)
@@ -33,7 +41,6 @@ struct RxSwiftLearn {
 
     @Test("不发出任何东西且永不终止的可观察物") func never() {
         let observable = Observable<Void>.never()
-        
         _ = observable
             .subscribe(onNext: { element in
                 print(element)
@@ -43,9 +50,8 @@ struct RxSwiftLearn {
     }
 
     @Test("不发出任何东西且永不终止的可观察物") func never2() {
+		let disposeBag = DisposeBag()
         let observable = Observable<Any>.never()
-        let disposeBag = DisposeBag()
-        
         observable.do(onSubscribe: {
             print("Subscribed")
         })
@@ -69,7 +75,6 @@ struct RxSwiftLearn {
 
     @Test("DisposeBag") func dispose() {
         let disposeBag = DisposeBag()
-        
         Observable.of("A", "B", "C")
             .subscribe {
                 print($0)
@@ -78,7 +83,6 @@ struct RxSwiftLearn {
 
     @Test("creat") func create() {
         let disposeBag = DisposeBag()
-        
         Observable<String>.create { observer in
             observer.onNext("1")
             observer.onCompleted()
@@ -96,7 +100,7 @@ struct RxSwiftLearn {
     @Test("订阅工厂") func factory() {
         let disposeBag = DisposeBag()
         var flip = false
-        let factory: Observable<Int> = Observable.deferred {
+        let factory: Observable<Int> = Observable.deferred {// deferred 推迟
             flip.toggle()
             if flip {
                 return Observable.of(1, 2, 3)
@@ -125,7 +129,6 @@ struct RxSwiftLearn {
         func loadText(from name: String) -> Single<String> {
             return Single.create { single in
                 let disposable = Disposables.create()
-                
                 guard let path = Bundle.main.path(forResource: name, ofType: "txt") else {
                     // single(.error(FileReadError.fileNotFound))
                     return disposable

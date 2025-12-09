@@ -5,9 +5,9 @@
 //  Created by 杨俊艺 on 2025/1/7.
 //
 
+import Foundation
 import Testing
 import RxSwift
-import Foundation
 
 @Suite("5 变换运算符")
 struct TransformTest {

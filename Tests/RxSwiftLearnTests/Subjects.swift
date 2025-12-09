@@ -18,7 +18,7 @@ func print<T: CustomTestStringConvertible>(label: String, event: Event<T>) {
 
 @Suite("2 Subject主题类型")
 struct SubjectTest {
-    @Test("PublishSubject") func publishSubject() {
+    @Test("PublishSubject 初始状态为空,仅向订阅者发送新元素,并且完成事件之后只会向新订阅者发送完成事件") func publishSubject() {
         let subject = PublishSubject<String>()
         
         subject.on(.next("Is anyone listening?"))
@@ -91,7 +91,7 @@ struct SubjectTest {
         
         subject.onNext("4")
         subject.onError(MyError.anError)
-        // subject.dispose()// 通过事先在重播主题上明确调用dispose()），新订阅者将只收到一个error事件表明主题已被处置
+        // subject.dispose()// 通过事先在重播主题上明确调用 dispose(）新订阅者将只收到一个 error 事件表明主题已被处置
         
         subject.subscribe {
             print(label: "3) ", event: $0)
