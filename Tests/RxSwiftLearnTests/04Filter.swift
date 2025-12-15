@@ -9,7 +9,7 @@ import Foundation
 import Testing
 import RxSwift
 
-@Suite("4 过滤操作符")
+@Suite("过滤操作符")
 struct FilterTest {
     @Test("忽略元素只关心事件") func ignoreElements() {
         let strikes = PublishSubject<String>()
@@ -33,8 +33,8 @@ struct FilterTest {
         
         strikes
             .element(at: 2)// 一旦在提供的索引处发出元素订阅就会终止
-            .subscribe { _ in
-                print("elementAt")
+            .subscribe { element in
+				print("elementAt \(element.element ?? "Completed")")
             }.disposed(by: disposeBag)
         
         strikes.onNext("A")
@@ -42,7 +42,7 @@ struct FilterTest {
         strikes.onNext("C")
     }
     
-    @Test("skip") func skip() {
+    @Test("skip 先跳过指定个数的元素") func skip() {
         let disposeBag = DisposeBag()
         
         Observable.of("A", "B", "C", "D", "E", "F")
@@ -54,7 +54,7 @@ struct FilterTest {
     
     @Test("skipWhile 跳过直到不满足后后续的就不拦截了") func skipWhile() {
         let disposeBag = DisposeBag()
-        Observable.of(2, 2, 3, 4, 4)
+		Observable.of(2, 2, 2, 3, 2, 4, 4)
             .skip(while: { $0.isMultiple(of: 2) } )
             .subscribe(onNext: {
                 print($0)
@@ -82,7 +82,7 @@ struct FilterTest {
         subject.onNext("D")
     }
     
-    @Test("take") func take() {
+    @Test("take 取指定个数") func take() {
         let disposeBag = DisposeBag()
         
         Observable.of(1, 2, 3, 4, 5, 6)
@@ -92,9 +92,8 @@ struct FilterTest {
             }.disposed(by: disposeBag)
     }
     
-    @Test("takeWhile 只要条件满足就一直拿") func takeWhile() {
+    @Test("takeWhile 条件满足一直拿") func takeWhile() {
         let disposeBag = DisposeBag()
-        
         Observable.of(2, 2, 4, 4, 6, 6)
             .enumerated()
             .take(while: { (index, element) in
@@ -102,11 +101,11 @@ struct FilterTest {
             })
             .map(\.element)
             .subscribe(onNext: {
-                  print($0)
+				print($0)
             }).disposed(by: disposeBag)
     }
     
-    @Test("takeUntil 一直拿到条件满足就停下") func takeUntil() {
+    @Test("takeUntil 条件满足就停下") func takeUntil() {
         let disposeBag = DisposeBag()
         
         Observable.of(1, 2, 3, 4, 5)
@@ -118,7 +117,7 @@ struct FilterTest {
             }).disposed(by: disposeBag)
     }
     
-    @Test("takeUntil 与另一个") func takeUntilTrigger() {
+    @Test("takeUntil 一直拿直到另一个发布") func takeUntilTrigger() {
         let disposeBag = DisposeBag()
         
         let subject = PublishSubject<String>()
@@ -155,26 +154,30 @@ struct FilterTest {
             }).disposed(by: disposeBag)
     }
     
-    @Test("distinctUntilChanged ???还没搞懂先放着") func distinctUntilChanged2() {
-        let disposeBag = DisposeBag()
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .spellOut
-        
-        Observable<NSNumber>.of(10, 110, 20, 200, 210, 310)
-            .distinctUntilChanged { a, b in
-                guard let aWords = formatter.string(from: a)?.components(separatedBy: " "),
-                      let bWords = formatter.string(from: b)?.components(separatedBy: " ") else { return false }
-                
-                var containsMatch = false
-                
-                for aWord in aWords where bWords.contains(aWord) {
-                    containsMatch = true
-                    break
-                }
-                return containsMatch
-            }
-            .subscribe(onNext: {
-                print($0)
-            }).disposed(by: disposeBag)
+    @Test("distinctUntilChanged 自定义相等比较逻辑") func distinctUntilChanged2() {
+		let disposeBag = DisposeBag()
+		
+		let formatter = NumberFormatter()
+		formatter.numberStyle = .spellOut
+		
+		Observable<NSNumber>.of(10, 10, 110, 20, 200, 210, 310)
+			.distinctUntilChanged { a, b in
+				guard let aWords = formatter.string(from: a)?.components(separatedBy: " "),
+					let bWords = formatter.string(from: b)?.components(separatedBy: " ") else { return false }
+				
+				var containsMatch = false
+				for aWord in aWords where bWords.contains(aWord) {
+					print(aWord)
+					containsMatch = true
+					break
+				}
+				
+				return containsMatch
+			}
+			.subscribe(onNext: {
+				print("结果 \($0)")
+			})
+			.disposed(by: disposeBag)
+		// 因为中文运行环境下 numberFormatter 可能无法正确转换数字所以结果可能不符合教程的预期
     }
 }

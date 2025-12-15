@@ -8,7 +8,7 @@
 import Testing
 import RxSwift
 
-@Suite("7 连接组合可观察序列")
+@Suite("组合运算符 连接组合可观察序列")
 struct CombiningOperatorsTest {
     @Test("序列订阅时的起始状态") func startWith() {
         let numbers = Observable.of(2, 3, 4)

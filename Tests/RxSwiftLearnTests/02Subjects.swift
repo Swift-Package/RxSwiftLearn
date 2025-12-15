@@ -16,7 +16,7 @@ func print<T: CustomTestStringConvertible>(label: String, event: Event<T>) {
     print(label, (event.element ?? event.error) ?? event)
 }
 
-@Suite("2 Subject主题类型")
+@Suite("Subject 主题类型")
 struct SubjectTest {
     @Test("PublishSubject 初始状态为空,仅向订阅者发送新元素,并且完成事件之后只会向新订阅者发送完成事件") func publishSubject() {
         let subject = PublishSubject<String>()

@@ -5,7 +5,7 @@ import RxSwift
 import RxCocoa
 @testable import RxSwiftLearn
 
-@Suite("1 入门指南")
+@Suite("入门指南")
 struct RxSwiftLearn {
     @Test("Observable") func example() {
 		var array = [10, 20, 30]

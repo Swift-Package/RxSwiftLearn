@@ -20,22 +20,5 @@ let package = Package(
 )
 
 // MARK: - 学习顺序
-// 1 RxSwiftLearnTests
-// 2 Subjects
-// 3 Relay
-// 4 Filter
-// 5 Transform
-// 6 PropertyListen
-// 7 CombiningOperators
 // 8 TimeOperators
 // 9 ErrorHandle
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//

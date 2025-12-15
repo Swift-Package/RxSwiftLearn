@@ -9,7 +9,7 @@ import Testing
 import RxSwift
 import RxRelay
 
-@Suite("3 常用的Relay 是对其他 Subject 的封装,永远不会终止")
+@Suite("常用的 Relay 是对其他 Subject 的封装,特点是永远不会终止")
 struct RelaysTest {
     @Test("PublishRelay") func publishRelay() {
         let disposeBag = DisposeBag()
