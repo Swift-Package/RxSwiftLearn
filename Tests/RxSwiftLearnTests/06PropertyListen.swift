@@ -47,7 +47,6 @@ struct PropertyListenTest {
         let charlotte = Student(score: BehaviorSubject(value: 90))
         
         let student = PublishSubject<Student>()
-        
         student
             .flatMapLatest { $0.score }
             .subscribe(onNext: {

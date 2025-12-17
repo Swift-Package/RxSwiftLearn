@@ -13,12 +13,13 @@ let package = Package(
         .package(url: "https://github.com/ReactiveX/RxSwift", branch: "main")
     ],
     targets: [
-        .target(name: "RxSwiftLearn", dependencies: ["RxSwift", .product(name: "RxCocoa", package: "RxSwift")]),
-        .testTarget(name: "RxSwiftLearnTests", dependencies: ["RxSwiftLearn", "RxSwift", .product(name: "RxCocoa", package: "RxSwift")]),
+        .target(name: "RxSwiftLearn", 
+				dependencies: ["RxSwift", .product(name: "RxCocoa", package: "RxSwift")]),
+		
+        .testTarget(name: "RxSwiftLearnTests", 
+					dependencies: ["RxSwiftLearn", "RxSwift", .product(name: "RxCocoa", package: "RxSwift")]),
     ],
     swiftLanguageModes: [.v6]
 )
 
-// MARK: - 学习顺序
-// 8 TimeOperators
-// 9 ErrorHandle
+// MARK: - RxSwift: Reactive Programming with Swift - Kedeco
