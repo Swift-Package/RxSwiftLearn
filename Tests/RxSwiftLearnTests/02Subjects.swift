@@ -8,19 +8,21 @@
 import Testing
 import RxSwift
 
-enum MyError: Error {
+public enum MyError: Error {
     case anError
 }
 
-func print<T: CustomTestStringConvertible>(label: String, event: Event<T>) {
+public func print<T: CustomTestStringConvertible>(label: String, event: Event<T>) {
     print(label, (event.element ?? event.error) ?? event)
 }
 
-@Suite("Subject 主题类型")
+// MARK: - 一个常见的需求是有时候可以手动向可观察对象添加新值以便将其发送给订阅者
+// 你需要一个既能作为可观察对象又可以作为观察者的东西,这种东西就叫 Subject
+@Suite("02Subject 主题类型(总共四种其中常用的是下面的三种)")
 struct SubjectTest {
-    @Test("PublishSubject 初始状态为空,仅向订阅者发送新元素,并且完成事件之后只会向新订阅者发送完成事件") func publishSubject() {
+    @Test("PublishSubject 初始状态为空,仅向订阅者发送新元素并且完成事件之后只会向新订阅者发送完成事件")
+	func publishSubject() {
         let subject = PublishSubject<String>()
-        
         subject.on(.next("Is anyone listening?"))
         
         let subscriptionOne = subject.subscribe { string in
@@ -37,14 +39,17 @@ struct SubjectTest {
         
         subject.onNext("3")
         
-        subscriptionOne.dispose()
+		print("第一个订阅取消")
+        subscriptionOne.dispose()// 第一个订阅取消
         
         subject.onNext("4")
         
+		print("发布者完成事件")
         subject.onCompleted()
         
         subject.onNext("5")
         
+		print("第二个订阅取消")
         subscriptionTwo.dispose()
         
         let disposeBag = DisposeBag()
@@ -56,7 +61,8 @@ struct SubjectTest {
         subject.onNext("?")
     }
     
-    @Test("BehaviorSubject 发送最新事件给新订阅者") func behaviorSubject() {
+    @Test("BehaviorSubject 发送最新事件给新订阅者")
+	func behaviorSubject() {
         let disposeBag = DisposeBag()
         let subject = BehaviorSubject(value: "初始值")
         
@@ -73,7 +79,8 @@ struct SubjectTest {
         }.disposed(by: disposeBag)
     }
     
-    @Test("ReplaySubject 缓冲指定数量事件给新订阅者") func replaySubject() {
+    @Test("ReplaySubject 缓冲指定数量事件给新订阅者")
+	func replaySubject() {
         let disposeBag = DisposeBag()
         let subject = ReplaySubject<String>.create(bufferSize: 2)
         

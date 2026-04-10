@@ -15,9 +15,10 @@ func getStartNumber() -> Int {
 	return start
 }
 
-@Suite("变换运算符")
+@Suite("05变换运算符")
 struct TransformTest {
-	@Test("sharedInstance 副作用") func shared() {
+	@Test("sharedInstance 副作用")
+	func shared() {
 		let disposeBag = DisposeBag()
 		let numbers = Observable<Int>.create { observer in
 			let start = getStartNumber()
@@ -45,7 +46,8 @@ struct TransformTest {
 			.disposed(by: disposeBag)
 	}
 	
-	@Test func toArray() {
+	@Test("当可观察对象完成时该操作符会将一个元素序列转换为一个包含这些元素的数组")
+	func toArray() {
         let disposeBag = DisposeBag()
         Observable.of("A", "B", "C")
             .toArray()
@@ -54,7 +56,8 @@ struct TransformTest {
             }.disposed(by: disposeBag)
     }
     
-    @Test("Map") func map() {
+    @Test("Map")
+	func map() {
         let disposeBag = DisposeBag()
         let formatter = NumberFormatter()
         formatter.numberStyle = .spellOut
@@ -67,4 +70,18 @@ struct TransformTest {
           })
           .disposed(by: disposeBag)
     }
+	
+	@Test("compactMap 如果映射后结果为 nil 则不保留")
+	func compactMap() {
+		let disposeBag = DisposeBag()
+		Observable.of("To", "be", nil, "or", "not", "to", "be", nil)
+			.compactMap { $0 }
+			.toArray()
+			.map { strings in
+				strings.joined(separator: " ")
+			}
+			.subscribe { str in
+				print(str)
+			}.disposed(by: disposeBag)
+	}
 }

@@ -8,7 +8,7 @@
 import Testing
 import RxSwift
 
-@Suite("调度器 Scheduler")
+@Suite("10调度器 Scheduler")
 struct SchedulerTest {
 	@Test("x") func test() {
 		

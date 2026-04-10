@@ -9,9 +9,10 @@ import Testing
 import RxSwift
 import RxRelay
 
-@Suite("常用的 Relay 是对其他 Subject 的封装,特点是永远不会终止")
+@Suite("03RxSwift 提供两种Relay, Relay 是对其他 Subject 的封装, 特点是永远不会终止且只能使用 accept 接受值而不能接受 completed 和 error 事件")
 struct RelaysTest {
-    @Test("PublishRelay") func publishRelay() {
+    @Test("PublishRelay")
+	func publishRelay() {
         let disposeBag = DisposeBag()
         let relay = PublishRelay<String>()
         
@@ -23,8 +24,9 @@ struct RelaysTest {
         
         relay.accept("1")
     }
-
-    @Test("BehaviorRelay") func behaviorRelay() {
+	
+    @Test("BehaviorRelay")
+	func behaviorRelay() {
         let disposeBag = DisposeBag()
         let relay = BehaviorRelay.init(value: "初始值")
         

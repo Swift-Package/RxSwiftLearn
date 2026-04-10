@@ -9,11 +9,12 @@ import Foundation
 import Testing
 import RxSwift
 
-@Suite("过滤操作符")
+@Suite("04过滤操作符")
 struct FilterTest {
-    @Test("忽略元素只关心事件") func ignoreElements() {
+    @Test("忽略元素只关心事件 将可观察序列转换成为Completable序列")
+	func ignoreElements() {
+		let disposeBag = DisposeBag()
         let strikes = PublishSubject<String>()
-        let disposeBag = DisposeBag()
         
         strikes
             .ignoreElements()
@@ -27,12 +28,13 @@ struct FilterTest {
         strikes.onCompleted()
     }
 
-    @Test("elementAt") func elementAt() {
+    @Test("elementAt 一旦在提供的索引处发出元素订阅就会终止")
+	func elementAt() {
+		let disposeBag = DisposeBag()
         let strikes = PublishSubject<String>()
-        let disposeBag = DisposeBag()
         
         strikes
-            .element(at: 2)// 一旦在提供的索引处发出元素订阅就会终止
+            .element(at: 2)
             .subscribe { element in
 				print("elementAt \(element.element ?? "Completed")")
             }.disposed(by: disposeBag)
@@ -42,9 +44,9 @@ struct FilterTest {
         strikes.onNext("C")
     }
     
-    @Test("skip 先跳过指定个数的元素") func skip() {
+    @Test("skip 先跳过指定个数的元素")
+	func skip() {
         let disposeBag = DisposeBag()
-        
         Observable.of("A", "B", "C", "D", "E", "F")
             .skip(3)
             .subscribe { str in
@@ -52,7 +54,8 @@ struct FilterTest {
             }.disposed(by: disposeBag)
     }
     
-    @Test("skipWhile 跳过直到不满足后后续的就不拦截了") func skipWhile() {
+    @Test("skipWhile 跳过直到不满足后后续的就不拦截了")
+	func skipWhile() {
         let disposeBag = DisposeBag()
 		Observable.of(2, 2, 2, 3, 2, 4, 4)
             .skip(while: { $0.isMultiple(of: 2) } )
@@ -61,9 +64,9 @@ struct FilterTest {
             }).disposed(by: disposeBag)
     }
     
-    @Test("skipUntil 跳过直到另一个订阅发布") func skipUntil() {
+    @Test("skipUntil 跳过直到另一个订阅发布")
+	func skipUntil() {
         let disposeBag = DisposeBag()
-        
         let subject = PublishSubject<String>()
         let trigger = PublishSubject<String>()
         
@@ -78,13 +81,14 @@ struct FilterTest {
         subject.onNext("B")
         
         trigger.onNext("X")
+		print("--trigger 另一个订阅发布事件--")
         subject.onNext("C")
         subject.onNext("D")
     }
     
-    @Test("take 取指定个数") func take() {
+    @Test("take 取指定个数")
+	func take() {
         let disposeBag = DisposeBag()
-        
         Observable.of(1, 2, 3, 4, 5, 6)
             .take(3)
             .subscribe { str in
@@ -92,7 +96,8 @@ struct FilterTest {
             }.disposed(by: disposeBag)
     }
     
-    @Test("takeWhile 条件满足一直拿") func takeWhile() {
+    @Test("takeWhile 条件满足一直拿")
+	func takeWhile() {
         let disposeBag = DisposeBag()
         Observable.of(2, 2, 4, 4, 6, 6)
             .enumerated()
@@ -105,9 +110,9 @@ struct FilterTest {
             }).disposed(by: disposeBag)
     }
     
-    @Test("takeUntil 条件满足就停下") func takeUntil() {
+    @Test("takeUntil 条件满足就停下")
+	func takeUntil() {
         let disposeBag = DisposeBag()
-        
         Observable.of(1, 2, 3, 4, 5)
             .take(until: { element in
                 element.isMultiple(of: 4)
@@ -117,9 +122,9 @@ struct FilterTest {
             }).disposed(by: disposeBag)
     }
     
-    @Test("takeUntil 一直拿直到另一个发布") func takeUntilTrigger() {
+    @Test("takeUntil 一直拿直到另一个发布")
+	func takeUntilTrigger() {
         let disposeBag = DisposeBag()
-        
         let subject = PublishSubject<String>()
         let trigger = PublishSubject<String>()
         
@@ -137,7 +142,8 @@ struct FilterTest {
         subject.onNext("3")
     }
     
-    @Test("takeUntil 内存管理") func takeUntilMemonry() {
+    @Test("takeUntil 内存管理")
+	func takeUntilMemonry() {
 //        _ = someObservable
 //            .takeUntil(self.rx.deallocated)
 //            .subscribe(onNext: {
@@ -145,7 +151,8 @@ struct FilterTest {
 //            })
     }
     
-    @Test("distinctUntilChanged 去除重复元素") func distinctUntilChanged() {
+    @Test("distinctUntilChanged 去除重复元素")
+	func distinctUntilChanged() {
         let disposeBag = DisposeBag()
         Observable.of("A", "A", "B", "B", "A")
             .distinctUntilChanged()
@@ -154,9 +161,9 @@ struct FilterTest {
             }).disposed(by: disposeBag)
     }
     
-    @Test("distinctUntilChanged 自定义相等比较逻辑") func distinctUntilChanged2() {
+    @Test("distinctUntilChanged 自定义相等比较逻辑")
+	func distinctUntilChanged2() {
 		let disposeBag = DisposeBag()
-		
 		let formatter = NumberFormatter()
 		formatter.numberStyle = .spellOut
 		

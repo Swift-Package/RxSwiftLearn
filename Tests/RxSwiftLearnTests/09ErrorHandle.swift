@@ -8,7 +8,7 @@
 import Testing
 import RxSwift
 
-@Suite("错误处理")
+@Suite("09错误处理")
 struct ErrorHandleTest {
 	@Test("x") func test() {
 		

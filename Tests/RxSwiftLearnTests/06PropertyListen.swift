@@ -9,16 +9,16 @@ import Testing
 import RxSwift
 import RxRelay
 
-@Suite("属性监听")
+@Suite("06属性监听")
 struct PropertyListenTest {
     
     struct Student {
         let score: BehaviorSubject<Int>
     }
-
-    @Test("flatMap 持续多跟踪对象") func flatMap() {
+	
+    @Test("flatMap 持续多跟踪对象")
+	func flatMap() {
         let disposeBag = DisposeBag()
-        
         let laura = Student(score: BehaviorSubject(value: 80))
         let charlotte = Student(score: BehaviorSubject(value: 90))
         
@@ -40,9 +40,9 @@ struct PropertyListenTest {
         charlotte.score.onNext(100)
     }
     
-    @Test("flatMapLatest 您想要执行新的搜索并忽略上一个搜索的结果") func flatMapLastest() {
+    @Test("flatMapLatest 它会自动切换到最新的可观察元素并取消订阅之前的可观察元素例如您想要执行新的搜索并忽略上一个搜索的结果")
+	func flatMapLastest() {
         let disposeBag = DisposeBag()
-        
         let laura = Student(score: BehaviorSubject(value: 80))
         let charlotte = Student(score: BehaviorSubject(value: 90))
         
@@ -59,16 +59,17 @@ struct PropertyListenTest {
         student.onNext(charlotte)
         
         laura.score.onNext(95)// 这个不会触发订阅了
+		
         charlotte.score.onNext(100)
     }
     
-    @Test("materialize and dematerialize") func meterialize() {
+    @Test("materialize and dematerialize")
+	func meterialize() {
         enum MyError: Error {
             case anError
         }
         
         let disposeBag = DisposeBag()
-        
         let laura = Student(score: BehaviorSubject(value: 80))
         let charlotte = Student(score: BehaviorSubject(value: 100))
         
@@ -83,21 +84,19 @@ struct PropertyListenTest {
             }).disposed(by: disposeBag)
         
         laura.score.onNext(85)
-		
         laura.score.onError(MyError.anError)
-		
-        laura.score.onNext(90)
+        laura.score.onNext(90)// 这个不会触发了
         
         student.onNext(charlotte)
     }
     
-    @Test("materialize and dematerialize2") func meterialize2() {
+    @Test("materialize and dematerialize2")
+	func meterialize2() {
         enum MyError: Error {
             case anError
         }
         
         let disposeBag = DisposeBag()
-        
         let laura = Student(score: BehaviorSubject(value: 80))
         let charlotte = Student(score: BehaviorSubject(value: 100))
         
@@ -113,20 +112,19 @@ struct PropertyListenTest {
         
         laura.score.onNext(85)
         laura.score.onError(MyError.anError)
-		
         laura.score.onNext(90)// 这个失效
         
         student.onNext(charlotte)
 		charlotte.score.onNext(105)
     }
     
-    @Test("materialize and dematerialize3") func meterialize3() {
+    @Test("materialize and dematerialize3")
+	func meterialize3() {
         enum MyError: Error {
             case anError
         }
         
         let disposeBag = DisposeBag()
-        
         let laura = Student(score: BehaviorSubject(value: 80))
         let charlotte = Student(score: BehaviorSubject(value: 100))
         

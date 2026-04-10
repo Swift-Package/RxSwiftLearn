@@ -7,7 +7,7 @@
 
 import Testing
 
-@Suite("基于时间的运算符")
+@Suite("08基于时间的运算符")
 struct TimeOperatorsTest {
     @Test func test() {
 		// 这些概念的教程位于 RxSwiftLearn Target 中

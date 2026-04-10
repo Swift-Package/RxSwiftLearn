@@ -8,9 +8,10 @@
 import Testing
 import RxSwift
 
-@Suite("组合运算符 连接组合可观察序列")
+@Suite("07组合运算符 连接组合可观察序列")
 struct CombiningOperatorsTest {
-    @Test("人为附加序列订阅时的起始状态 startWith") func startWith() {
+    @Test("人为附加序列订阅时的起始状态 startWith")
+	func startWith() {
         let numbers = Observable.of(2, 3, 4)
         let observable = numbers.startWith(1)
         _ = observable.subscribe(onNext: { value in
@@ -18,7 +19,8 @@ struct CombiningOperatorsTest {
           })
     }
     
-    @Test("连接两个可观察序列 concat") func concat() {
+    @Test("连接两个可观察序列 concat")
+	func concat() {
         // 它订阅集合中的第一个序列依次传递其中的元素直到处理完然后处理下一个序列
 		// 这个过程会重复进行直到集合中的所有 Observable 都被处理完毕
 		// 如果在任何时候内部 Observable 抛出错误则连接的 Observable 也会抛出该错误并终止
@@ -30,7 +32,8 @@ struct CombiningOperatorsTest {
           })
     }
     
-    @Test("另一种连接两个可观察序列 concat") func concat2() {
+    @Test("另一种连接两个可观察序列 concat")
+	func concat2() {
         let germanCities = Observable.of("Berlin", "Munich", "Frankfurt")
         let spanishCities = Observable.of("Madrid", "Barcelona", "Valencia")
         let observable = germanCities.concat(spanishCities)
@@ -39,7 +42,8 @@ struct CombiningOperatorsTest {
           })
     }
     
-    @Test("concatMap") func concatMap() {
+    @Test("concatMap")
+	func concatMap() {
         let sequences = [
             "German cities": Observable.of("Berlin", "Munich", "Frankfurt"),
             "Spanish cities": Observable.of("Madrid", "Barcelona", "Valencia")
@@ -58,7 +62,8 @@ struct CombiningOperatorsTest {
 		// 在开始考虑下一个国家之前输出给定国家的完整序列
     }
     
-    @Test("合并 merge") func merge() {
+    @Test("合并 merge")
+	func merge() {
         let left = PublishSubject<String>()
         let right = PublishSubject<String>()
         let source = Observable.of(left.asObservable(), right.asObservable())
@@ -88,7 +93,8 @@ struct CombiningOperatorsTest {
 		// merge(maxConcurrent:) 允许限制同时订阅的内部可观察序列的数量
 	}
 	
-	@Test("合并首发事件并持续合并最新事件与另一个事件 combineLatest") func combineLatest() {
+	@Test("合并首发事件并持续合并最新事件与另一个事件 combineLatest")
+	func combineLatest() {
 		let left = PublishSubject<String>()
 		let right = PublishSubject<String>()
 		let observable = Observable.combineLatest(left, right) { l, r in
@@ -113,7 +119,8 @@ struct CombiningOperatorsTest {
 		// 之后每当一个可观察对象发出新值时闭包都会接收每个可观察对象的最新值并产生结果
 	}
 	
-	@Test("Zip") func zip() {
+	@Test("Zip")
+	func zip() {
 		enum Weather {
 			case cloudy
 			case sunny
@@ -130,7 +137,8 @@ struct CombiningOperatorsTest {
 		})
 	}
 	
-	@Test("触发器 withLatestFrom") func withLatestFrom() {
+	@Test("触发器 withLatestFrom")
+	func withLatestFrom() {
 		let button = PublishSubject<Void>()
 		let textField = PublishSubject<String>()
 		
@@ -149,7 +157,8 @@ struct CombiningOperatorsTest {
 		// 适用于所有需要从可观察对象获取当前最新值但仅在特定触发器发生时才获取该值的情况
 	}
 	
-	@Test("触发器 sample") func sample() {
+	@Test("触发器 sample")
+	func sample() {
 		let button = PublishSubject<Void>()
 		let textField = PublishSubject<String>()
 		
@@ -168,7 +177,8 @@ struct CombiningOperatorsTest {
 		// 如果没有新数据到达 sample(_:) 则不会发出任何值
 	}
 	
-	@Test("amb 优先选择") func amb() {
+	@Test("amb 优先选择")
+	func amb() {
 		let left = PublishSubject<String>()
 		let right = PublishSubject<String>()
 		
@@ -188,7 +198,8 @@ struct CombiningOperatorsTest {
 		// 它有一些特定的实际应用场景例如连接到冗余服务器并优先选择响应最快的服务器
 	}
 	
-	@Test("switchLatest 切换到最新的可观察序列") func switchLatest() {
+	@Test("switchLatest 切换到最新的可观察序列")
+	func switchLatest() {
 		let one = PublishSubject<String>()
 		let two = PublishSubject<String>()
 		let three = PublishSubject<String>()
@@ -219,7 +230,8 @@ struct CombiningOperatorsTest {
 		
 	}
 	
-	@Test("reduce 汇总值") func reduce() {
+	@Test("reduce 汇总值")
+	func reduce() {
 		let source = Observable.of(1, 3, 5, 7, 9)
 		let observable = source.reduce(0) { summary, newValue in
 			summary + newValue
@@ -233,7 +245,8 @@ struct CombiningOperatorsTest {
 		// 当源可观察对象完成时它会发出汇总值然后自身也完成
 	}
 	
-	@Test("scan 步加值") func scan() {
+	@Test("scan 步加值")
+	func scan() {
 		let source = Observable.of(1, 3, 5, 7, 9)
 		let observable = source.scan(0) { summary, newValue in
 			summary + newValue
@@ -243,7 +256,8 @@ struct CombiningOperatorsTest {
 		})
 	}
 	
-	@Test("scan 步进值和当前值") func scan2() {
+	@Test("scan 步进值和当前值")
+	func scan2() {
 		let source = Observable.of(1, 3, 5, 7, 9)
 		let scanObservable = source.scan(0, accumulator: +)
 		let observable = Observable.zip(source, scanObservable)
@@ -253,7 +267,8 @@ struct CombiningOperatorsTest {
 		})
 	}
 
-	@Test("scan 步进值和当前值") func scan3() {
+	@Test("scan 步进值和当前值")
+	func scan3() {
 		let source = Observable.of(1, 3, 5, 7, 9)
 		let observable = source.scan((0, 0)) { acc, current in
 			return (current, acc.1 + current)
